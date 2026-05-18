@@ -5,7 +5,13 @@ import pandas as pd
 import numpy as np
 import os
 
-st.set_page_config(page_title="SigNoise Viewer Pro", layout="wide", page_icon="SigNoise_charge.svg")
+# Configuration des chemins
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def get_path(filename):
+    return os.path.join(BASE_DIR, filename)
+
+st.set_page_config(page_title="SigNoise Viewer Pro", layout="wide", page_icon=get_path("SigNoise_charge.svg"))
 
 # Style CSS identique à l'app desktop
 st.markdown("""
@@ -31,16 +37,16 @@ st.markdown("""
 # --- HEADER AVEC LOGOS ---
 col_logo1, col_title, col_logo2 = st.columns([1, 4, 1])
 with col_logo1:
-    st.image("ern.png", width=100)
+    st.image(get_path("ern.png"), width=100)
 with col_title:
     st.markdown("<h1 style='text-align: center;'><img src='https://cdn-icons-png.flaticon.com/512/263/263059.png' width='40'> SigNoise : Dashboard d'Identification Cloud</h1>", unsafe_allow_html=True)
 with col_logo2:
-    st.image("en.png", width=100)
+    st.image(get_path("en.png"), width=100)
 
 st.markdown("---")
 
 # 1. Gestion des fichiers JSON
-archive_dir = "archives"
+archive_dir = get_path("archives")
 if not os.path.exists(archive_dir):
     os.makedirs(archive_dir)
 
@@ -48,7 +54,7 @@ json_files = [f for f in os.listdir(archive_dir) if f.endswith(".json")]
 data = None
 
 # Sidebar
-st.sidebar.image("SigNoise_icon.svg", use_container_width=True)
+st.sidebar.image(get_path("SigNoise_icon.svg"), use_container_width=True)
 st.sidebar.markdown("<h2 style='display: flex; align-items: center;'><img src='https://cdn-icons-png.flaticon.com/512/622/622669.png' width='30' style='margin-right: 10px;'> Acquisitions</h2>", unsafe_allow_html=True)
 if json_files:
     selected_file = st.sidebar.selectbox("Sélectionner un traitement", sorted(json_files, reverse=True))
