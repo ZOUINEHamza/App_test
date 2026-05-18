@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import os
 
-st.set_page_config(page_title="SigNoise Viewer Pro", layout="wide", page_icon="📡")
+st.set_page_config(page_title="SigNoise Viewer Pro", layout="wide", page_icon="SigNoise_charge.svg")
 
 # Style CSS identique à l'app desktop
 st.markdown("""
@@ -19,10 +19,24 @@ st.markdown("""
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         border-top: 4px solid #1D9E75;
     }
+    .logo-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("📡 SigNoise : Dashboard d'Identification Cloud")
+# --- HEADER AVEC LOGOS ---
+col_logo1, col_title, col_logo2 = st.columns([1, 4, 1])
+with col_logo1:
+    st.image("ern.png", width=100)
+with col_title:
+    st.markdown("<h1 style='text-align: center;'><img src='https://cdn-icons-png.flaticon.com/512/263/263059.png' width='40'> SigNoise : Dashboard d'Identification Cloud</h1>", unsafe_allow_html=True)
+with col_logo2:
+    st.image("en.png", width=100)
+
 st.markdown("---")
 
 # 1. Gestion des fichiers JSON
@@ -34,7 +48,7 @@ json_files = [f for f in os.listdir(archive_dir) if f.endswith(".json")]
 data = None
 
 # Sidebar
-st.sidebar.header("🔍 Historique")
+st.sidebar.markdown("<h2 style='display: flex; align-items: center;'><img src='https://cdn-icons-png.flaticon.com/512/622/622669.png' width='30' style='margin-right: 10px;'> Historique</h2>", unsafe_allow_html=True)
 if json_files:
     selected_file = st.sidebar.selectbox("Sélectionner un traitement", sorted(json_files, reverse=True))
     with open(os.path.join(archive_dir, selected_file), 'r') as f:
@@ -63,7 +77,7 @@ if data:
     col_dist, col_prob = st.columns([1, 1])
 
     with col_dist:
-        st.subheader("Distribution des émetteurs")
+        st.markdown("### <img src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png' width='25' style='vertical-align: middle;'> Distribution des émetteurs", unsafe_allow_html=True)
         dist = data.get("distribution", {})
         if dist:
             labels = list(dist.keys())
@@ -92,19 +106,19 @@ if data:
     col_t1, col_t2 = st.columns([1.5, 1])
     
     with col_t1:
-        st.subheader("📋 Détail des Bursts détectés")
+        st.markdown("### <img src='https://cdn-icons-png.flaticon.com/512/2645/2645897.png' width='25' style='vertical-align: middle;'> Détail des Bursts détectés", unsafe_allow_html=True)
         bursts = data.get("bursts", {})
         if bursts:
             df_bursts = pd.DataFrame({
                 "Burst #": range(1, len(bursts["labels"]) + 1),
                 "Classe prédite": bursts["labels"],
                 "Probabilité (%)": bursts["probas"],
-                "Statut": ["✅ Connu" if l != "INCONNU" else "❓ Inconnu" for l in bursts["labels"]]
+                "Statut": ["Connu" if l != "INCONNU" else "Inconnu" for l in bursts["labels"]]
             })
             st.dataframe(df_bursts, use_container_width=True, height=300, hide_index=True)
 
     with col_t2:
-        st.subheader("🕵️ Groupes Inconnus")
+        st.markdown("### <img src='https://cdn-icons-png.flaticon.com/512/954/954591.png' width='25' style='vertical-align: middle;'> Groupes Inconnus", unsafe_allow_html=True)
         groupes = data.get("groupes_inconnus", {})
         if groupes:
             uids = list(groupes.keys())
@@ -122,7 +136,7 @@ if data:
     st.markdown("---")
 
     # --- ANALYSE SIGNAL ---
-    st.header("🔬 Analyse Spectrale et Stabilité")
+    st.markdown("## <img src='https://cdn-icons-png.flaticon.com/512/2782/2782803.png' width='35' style='vertical-align: middle;'> Analyse Spectrale et Stabilité", unsafe_allow_html=True)
     tab_psd, tab_avar = st.tabs(["Densité Spectrale (PSD)", "Variance d'Allan (AVAR)"])
 
     with tab_psd:
@@ -147,7 +161,7 @@ if data:
         except: st.error("Données AVAR manquantes.")
 
 else:
-    st.info("👋 Prêt pour l'affichage. Veuillez sélectionner un fichier dans l'historique (sidebar) ou en importer un.")
+    st.info("Prêt pour l'affichage. Veuillez sélectionner un fichier dans l'historique (sidebar) ou en importer un.")
 
 st.sidebar.markdown("---")
 st.sidebar.info("PFE 2025/2026 - École Navale")
