@@ -48,7 +48,8 @@ json_files = [f for f in os.listdir(archive_dir) if f.endswith(".json")]
 data = None
 
 # Sidebar
-st.sidebar.markdown("<h2 style='display: flex; align-items: center;'><img src='https://cdn-icons-png.flaticon.com/512/622/622669.png' width='30' style='margin-right: 10px;'> Historique</h2>", unsafe_allow_html=True)
+st.sidebar.image("SigNoise_icon.svg", use_container_width=True)
+st.sidebar.markdown("<h2 style='display: flex; align-items: center;'><img src='https://cdn-icons-png.flaticon.com/512/622/622669.png' width='30' style='margin-right: 10px;'> Acquisitions</h2>", unsafe_allow_html=True)
 if json_files:
     selected_file = st.sidebar.selectbox("Sélectionner un traitement", sorted(json_files, reverse=True))
     with open(os.path.join(archive_dir, selected_file), 'r') as f:
